@@ -177,7 +177,7 @@ export function BookModal({
                   <InfoBlock
                     label="Status"
                     value={
-                      book.status === 'accepted'
+                      book.status === 'published'
                         ? 'Publicado'
                         : book.status || 'Desconhecido'
                     }

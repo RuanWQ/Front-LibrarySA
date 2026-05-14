@@ -44,6 +44,7 @@ export default function ProfilePage() {
   const [favorites, setFavorites] = useState<Favorite[]>([])
   const [progress, setProgress] = useState<ReadingProgress[]>([])
   const [myBooks, setMyBooks] = useState<Book[]>([])
+  const [likes, setLikes] = useState<any[]>([])
   const [bookToDelete, setBookToDelete] = useState<Book | null>(null)
 
   // ESTADOS DE UI
@@ -75,11 +76,12 @@ export default function ProfilePage() {
       try {
         setIsLoadingProfile(true)
         setError('')
-        const [profileData, favoritesData, progressData, myBooksData] = await Promise.all([
+        const [profileData, favoritesData, progressData, myBooksData, likesData] = await Promise.all([
           usersService.getProfile(user.username),
           booksService.getFavorites(),
           booksService.getProgress(),
           booksService.getMyBooks(),
+          booksService.getLikes(),
         ])
 
         if (!isActive) return
@@ -87,6 +89,7 @@ export default function ProfilePage() {
         setProfile({ ...profileData, email: user.email })
         setFavorites(favoritesData)
         setProgress(progressData)
+        setLikes(likesData)
         setMyBooks(myBooksData)
         setForm({ bio: profileData.bio || '' })
         
@@ -121,6 +124,12 @@ export default function ProfilePage() {
 
   const readingItems = useMemo(() => progress.filter((item) => !item.finished), [progress])
   const finishedItems = useMemo(() => progress.filter((item) => item.finished), [progress])
+
+  // Extrair livros para cada estante
+  const favoriteBooks = useMemo(() => favorites.map((fav) => fav.book_detail).filter(Boolean) as Book[], [favorites])
+  const readingBooks = useMemo(() => readingItems.map((item) => item.book_detail).filter(Boolean) as Book[], [readingItems])
+  const finishedBooks = useMemo(() => finishedItems.map((item) => item.book_detail).filter(Boolean) as Book[], [finishedItems])
+  const likedBooks = useMemo(() => likes.map((like: any) => like.book_detail).filter(Boolean) as Book[], [likes])
 
   // LÓGICA DE CROPPER
   const onCropComplete = useCallback((_: Area, croppedPixels: Area) => {
@@ -372,6 +381,114 @@ export default function ProfilePage() {
           ) : (
             <div className="rounded-3xl border-2 border-dashed border-[#d7c8b8] bg-white/50 py-20 text-center">
               <p className="text-slate-400 font-medium tracking-tight">Nenhuma obra publicada. Comece sua história agora!</p>
+            </div>
+          )}
+        </section>
+
+        {/* ESTANTE: LENDO */}
+        <section className="mt-16">
+          <h2 className="mb-8 text-3xl font-black tracking-tighter">📖 Lendo</h2>
+          {readingBooks.length > 0 ? (
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {readingBooks.map((book) => (
+                <Link key={book.id} href={`/reader?book=${book.id}`} className="group flex flex-col overflow-hidden rounded-3xl bg-white border border-[#eadfcd] shadow-sm transition-all hover:shadow-2xl">
+                  <div className="relative h-64 overflow-hidden">
+                    <img src={getBookCoverUrl(book)} alt={book.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  </div>
+                  <div className="flex-1 flex flex-col p-5">
+                    <h3 className="line-clamp-1 text-lg font-bold">{book.title}</h3>
+                    <p className="text-sm font-medium text-slate-400">{book.author?.username || 'Autor'}</p>
+                    <div className="mt-auto pt-4 border-t border-slate-50">
+                      <span className="font-bold text-[#d4a03d]">★ {book.average_rating?.toFixed(1) || '0.0'}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border-2 border-dashed border-[#d7c8b8] bg-white/50 py-12 text-center">
+              <p className="text-slate-400 font-medium">Comece a ler um livro</p>
+            </div>
+          )}
+        </section>
+
+        {/* ESTANTE: FAVORITOS */}
+        <section className="mt-16">
+          <h2 className="mb-8 text-3xl font-black tracking-tighter">❤️ Favoritos</h2>
+          {favoriteBooks.length > 0 ? (
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {favoriteBooks.map((book) => (
+                <Link key={book.id} href={`/reader?book=${book.id}`} className="group flex flex-col overflow-hidden rounded-3xl bg-white border border-[#eadfcd] shadow-sm transition-all hover:shadow-2xl">
+                  <div className="relative h-64 overflow-hidden">
+                    <img src={getBookCoverUrl(book)} alt={book.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  </div>
+                  <div className="flex-1 flex flex-col p-5">
+                    <h3 className="line-clamp-1 text-lg font-bold">{book.title}</h3>
+                    <p className="text-sm font-medium text-slate-400">{book.author?.username || 'Autor'}</p>
+                    <div className="mt-auto pt-4 border-t border-slate-50">
+                      <span className="font-bold text-[#d4a03d]">★ {book.average_rating?.toFixed(1) || '0.0'}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border-2 border-dashed border-[#d7c8b8] bg-white/50 py-12 text-center">
+              <p className="text-slate-400 font-medium">Nenhum favorito ainda</p>
+            </div>
+          )}
+        </section>
+
+        {/* ESTANTE: CURTIDOS */}
+        <section className="mt-16">
+          <h2 className="mb-8 text-3xl font-black tracking-tighter">👍 Curtidos</h2>
+          {likedBooks.length > 0 ? (
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {likedBooks.map((book) => (
+                <Link key={book.id} href={`/reader?book=${book.id}`} className="group flex flex-col overflow-hidden rounded-3xl bg-white border border-[#eadfcd] shadow-sm transition-all hover:shadow-2xl">
+                  <div className="relative h-64 overflow-hidden">
+                    <img src={getBookCoverUrl(book)} alt={book.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  </div>
+                  <div className="flex-1 flex flex-col p-5">
+                    <h3 className="line-clamp-1 text-lg font-bold">{book.title}</h3>
+                    <p className="text-sm font-medium text-slate-400">{book.author?.username || 'Autor'}</p>
+                    <div className="mt-auto pt-4 border-t border-slate-50">
+                      <span className="font-bold text-[#d4a03d]">★ {book.average_rating?.toFixed(1) || '0.0'}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border-2 border-dashed border-[#d7c8b8] bg-white/50 py-12 text-center">
+              <p className="text-slate-400 font-medium">Nenhum livro curtido ainda</p>
+            </div>
+          )}
+        </section>
+
+        {/* ESTANTE: CONCLUÍDOS */}
+        <section className="mt-16">
+          <h2 className="mb-8 text-3xl font-black tracking-tighter">✅ Concluídos</h2>
+          {finishedBooks.length > 0 ? (
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {finishedBooks.map((book) => (
+                <Link key={book.id} href={`/reader?book=${book.id}`} className="group flex flex-col overflow-hidden rounded-3xl bg-white border border-[#eadfcd] shadow-sm transition-all hover:shadow-2xl">
+                  <div className="relative h-64 overflow-hidden">
+                    <img src={getBookCoverUrl(book)} alt={book.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  </div>
+                  <div className="flex-1 flex flex-col p-5">
+                    <h3 className="line-clamp-1 text-lg font-bold">{book.title}</h3>
+                    <p className="text-sm font-medium text-slate-400">{book.author?.username || 'Autor'}</p>
+                    <div className="mt-auto pt-4 border-t border-slate-50">
+                      <span className="font-bold text-[#d4a03d]">★ {book.average_rating?.toFixed(1) || '0.0'}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border-2 border-dashed border-[#d7c8b8] bg-white/50 py-12 text-center">
+              <p className="text-slate-400 font-medium">Nenhum livro concluído ainda</p>
             </div>
           )}
         </section>

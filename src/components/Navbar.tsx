@@ -31,7 +31,7 @@ export function Navbar() {
         </Link>
         {mounted && user ? (
           <Link href="/books" className="hover:text-[#d4a03d]">
-            Meus livros
+            Criar
           </Link>
         ) : null}
         {mounted && user ? (

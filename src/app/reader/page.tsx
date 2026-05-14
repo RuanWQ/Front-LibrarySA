@@ -2,9 +2,11 @@
 
 import { Suspense, useEffect, useMemo, useState } from 'react'
 
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 import Link from 'next/link'
+
+import { api } from '@/services/api'
 
 import {
   ChevronLeft,
@@ -72,6 +74,7 @@ const createFallbackPages = (
 
 function ReaderScreen() {
   const searchParams = useSearchParams()
+  const router = useRouter()
 
   const rawBookId = searchParams.get('book')
 
@@ -254,6 +257,16 @@ function ReaderScreen() {
   }, [book])
 
   useEffect(() => {
+    const incrementView = async () => {
+      try {
+        await api.post(`/books/${bookId}/increment_view/`)
+      } catch (e) { /* silencioso */ }
+    }
+    if (bookId) incrementView()
+  }, [bookId])
+  
+
+  useEffect(() => {
     if (
       !book ||
       pages.length === 0 ||
@@ -292,7 +305,7 @@ function ReaderScreen() {
           await booksService.updateReadingProgress(
             book.id,
             currentPage + 1,
-            false
+            currentPage === pages.length - 1
           )
 
           setSaveStatus('saved')
@@ -310,6 +323,7 @@ function ReaderScreen() {
   }, [
     book,
     currentPage,
+    pages.length,
     progressHydrated,
     canSaveProgress,
   ])
@@ -354,19 +368,7 @@ function ReaderScreen() {
   }
 
   const handleFinishReading = async () => {
-    if (!book) return
-
-    try {
-      await booksService.updateReadingProgress(
-        book.id,
-        pages.length,
-        true
-      )
-
-      alert('Leitura concluida!')
-    } catch (error) {
-      console.error(error)
-    }
+    router.push('/books')
   }
 
   const handleSendReview = async () => {
@@ -463,19 +465,18 @@ function ReaderScreen() {
       </div>
 
       <Reader
-        book={book}
-        pages={pages}
-        currentPage={currentPage}
-        fontSize={fontSize}
-        saving={saving}
-        saveStatus={saveStatus}
-        canSaveProgress={canSaveProgress}
-        onPageChange={setCurrentPage}
-        onFontSizeChange={setFontSize}
-        onFinishReading={
-          handleFinishReading
-        }
-      />
+          book={book}
+          pages={pages}
+          currentPage={currentPage}
+          fontSize={fontSize}
+          saving={saving}
+          saveStatus={saveStatus}
+          canSaveProgress={canSaveProgress} 
+          onSaveProgress={() => { console.log('Progresso salvo!') }} 
+          onPageChange={setCurrentPage}
+          onFontSizeChange={setFontSize}
+          onFinishReading={handleFinishReading}
+        />
 
       <section className="mx-auto mt-10 max-w-5xl px-6 pb-20">
         <div className="mb-6 flex items-center gap-4">

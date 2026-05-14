@@ -1,5 +1,5 @@
 import { api } from './api'
-import { Profile, User } from '@/types/user'
+import { Profile } from '@/types/user'
 import { Review } from '@/types/review'
 
 export const usersService = {

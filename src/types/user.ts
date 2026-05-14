@@ -6,6 +6,7 @@ export interface User {
   email?: string
   bio?: string
   avatar?: string | null
+  banner?: string | null
   published_books?: Book[]
   reading_books?: Book[]
   finished_books?: Book[]
@@ -16,4 +17,5 @@ export interface User {
 export interface Profile extends User {
   followers_count?: number
   following_count?: number
+  
 }

@@ -10,6 +10,8 @@ interface ReaderProps {
   currentPage: number
   fontSize: number
   saving: boolean
+  canSaveProgress: boolean
+  onFinishReading: () => void
   saveStatus: 'idle' | 'saved' | 'error'
   onPageChange: (page: number) => void
   onFontSizeChange: (size: number) => void
@@ -21,11 +23,10 @@ export function Reader({
   pages,
   currentPage,
   fontSize,
-  saving,
   saveStatus,
   onPageChange,
   onFontSizeChange,
-  onSaveProgress,
+  onFinishReading, // Adicionado na desestruturação
 }: ReaderProps) {
   const page = pages?.[currentPage]
   const progress = pages?.length > 0 ? Math.round(((currentPage + 1) / pages.length) * 100) : 0
@@ -120,7 +121,7 @@ export function Reader({
         <section className="rounded-lg border border-[#d4a03d]/20 bg-[#f7efe2] text-[#24170f] shadow-[0_28px_80px_rgba(0,0,0,0.42)]">
           <div className="border-b border-[#24170f]/10 px-5 py-4 md:px-8">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <Link href="/estante" className="text-sm font-black text-[#8a5a2b] hover:text-[#24170f]">
+              <Link href="/books" className="text-sm font-black text-[#8a5a2b] hover:text-[#24170f]">
                 Voltar para estante
               </Link>
               <span className="text-sm font-bold text-[#6f5b45]">
@@ -150,17 +151,30 @@ export function Reader({
             >
               Anterior
             </button>
+            
             <div className="flex items-center justify-center rounded-lg bg-[#24170f]/5 px-4 text-sm font-bold text-[#6f5b45]">
               {progress}% lido
             </div>
-            <button
-              type="button"
-              onClick={handleNext}
-              disabled={!pages || currentPage === pages.length - 1}
-              className="h-12 rounded-lg bg-[#24170f] text-sm font-black text-[#f7efe2] transition hover:bg-[#3a291b] disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Próxima
-            </button>
+
+            {/* AJUSTE 3: Lógica do botão dinâmico na última página */}
+            {currentPage === pages.length - 1 ? (
+              <button
+                type="button"
+                onClick={onFinishReading}
+                className="h-12 rounded-lg bg-[#f3c76a] text-sm font-black text-[#17120d] transition hover:bg-[#d4a03d] shadow-lg"
+              >
+                Voltar para estante
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={!pages || currentPage === pages.length - 1}
+                className="h-12 rounded-lg bg-[#24170f] text-sm font-black text-[#f7efe2] transition hover:bg-[#3a291b] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Próxima
+              </button>
+            )}
           </div>
         </section>
       </div>
