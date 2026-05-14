@@ -99,12 +99,12 @@ const THEMES = {
 type BookStyles = {
   coverColor: string
   fontFamily: string
-  fontSize: string
+  fontSize: number
   pageColor: string
   textColor: string
   borderColor: string
-  borderWidth: string
-  borderRadius: string
+  borderWidth: number
+  borderRadius: number
   borderStyle: string
 }
 
@@ -126,12 +126,12 @@ const createEmptyForm = (): BookForm => ({
   styles: {
     coverColor: '#2b1d1d',
     fontFamily: 'var(--font-eb)',
-    fontSize: '18px',
+    fontSize: 18,
     pageColor: '#f4ece1',
     textColor: '#3b2f23',
     borderColor: '#8c6d46',
-    borderWidth: '6px',
-    borderRadius: '4px',
+    borderWidth: 6,
+    borderRadius: 4,
     borderStyle: 'double'
   }
 })
@@ -300,9 +300,9 @@ export default function BooksPage() {
       // Convertemos as strings para números usando parseInt
       styles: {
         ...form.styles,
-        fontSize: parseInt(form.styles.fontSize) || 18,
-        borderWidth: parseInt(form.styles.borderWidth) || 0,
-        borderRadius: parseInt(form.styles.borderRadius) || 0,
+        fontSize: `${form.styles.fontSize}px`,
+        borderWidth: `${form.styles.borderWidth}px`,
+        borderRadius: `${form.styles.borderRadius}px`,
       }
     }
 
@@ -617,13 +617,13 @@ export default function BooksPage() {
                           type="range"
                           min="14"
                           max="36"
-                          value={parseInt(form.styles.fontSize)}
+                          value={(form.styles.fontSize)}
                           onChange={e =>
                             setForm(f => ({
                               ...f,
                               styles: {
                                 ...f.styles,
-                                fontSize: `${e.target.value}px`
+                                fontSize: Number(e.target.value)
                               }
                             }))
                           }
@@ -700,7 +700,7 @@ export default function BooksPage() {
                         min={0}
                         max={50}
                         placeholder="Espessura"
-                        value={parseInt(form.styles.borderWidth)}
+                        value={(form.styles.borderWidth)}
                         onChange={e => {
                           const value = Math.min(
                             50,
@@ -711,7 +711,7 @@ export default function BooksPage() {
                             ...f,
                             styles: {
                               ...f.styles,
-                              borderWidth: `${value}px`
+                              borderWidth: value
                             }
                           }))
                         }}
@@ -723,7 +723,7 @@ export default function BooksPage() {
                         min={0}
                         max={100}
                         placeholder="Radius"
-                        value={parseInt(form.styles.borderRadius)}
+                        value={(form.styles.borderRadius)}
                         onChange={e => {
                           const value = Math.min(
                             100,
@@ -734,7 +734,7 @@ export default function BooksPage() {
                             ...f,
                             styles: {
                               ...f.styles,
-                              borderRadius: `${value}px`
+                              borderRadius: value
                             }
                           }))
                         }}
