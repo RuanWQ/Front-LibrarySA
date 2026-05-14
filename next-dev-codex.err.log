@@ -1,0 +1,214 @@
+ ⚠ Port 3000 is in use by process 29640, using available port 3005 instead.
+ ⨯ ./src/components/Reader.tsx
+Error:   [31mx[0m Expression expected
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\components\Reader.tsx[0m:102:1]
+ [2m 99[0m |           <Link
+ [2m100[0m |             href="/estante"
+ [2m101[0m |             className="mt-3 flex h-11 w-full items-center justify-center rounded-lg border border-white/10 text-sm font-black text-[#f2dfc5] transition hover:border-[#f3c76a]/60 hover:bg-white/[0.04]"
+ [2m102[0m |           <button
+     : [35;1m          ^[0m
+ [2m103[0m |             type="button"
+ [2m104[0m |             onClick={onSaveProgress}
+ [2m105[0m |             disabled={saving}
+     `----
+  [31mx[0m Expected ',', got 'type'
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\components\Reader.tsx[0m:103:1]
+ [2m100[0m |             href="/estante"
+ [2m101[0m |             className="mt-3 flex h-11 w-full items-center justify-center rounded-lg border border-white/10 text-sm font-black text-[#f2dfc5] transition hover:border-[#f3c76a]/60 hover:bg-white/[0.04]"
+ [2m102[0m |           <button
+ [2m103[0m |             type="button"
+     : [35;1m            ^^^^[0m
+ [2m104[0m |             onClick={onSaveProgress}
+ [2m105[0m |             disabled={saving}
+ [2m106[0m |             className="mt-3 h-11 w-full rounded-lg bg-[#f3c76a] text-sm font-black text-[#17120d] transition hover:bg-[#ffd983] disabled:cursor-not-allowed disabled:opacity-70"
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Reader.tsx
+./src/app/reader/page.tsx
+ ⨯ ./src/components/Reader.tsx
+Error:   [31mx[0m Expression expected
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\components\Reader.tsx[0m:102:1]
+ [2m 99[0m |           <Link
+ [2m100[0m |             href="/estante"
+ [2m101[0m |             className="mt-3 flex h-11 w-full items-center justify-center rounded-lg border border-white/10 text-sm font-black text-[#f2dfc5] transition hover:border-[#f3c76a]/60 hover:bg-white/[0.04]"
+ [2m102[0m |           <button
+     : [35;1m          ^[0m
+ [2m103[0m |             type="button"
+ [2m104[0m |             onClick={onSaveProgress}
+ [2m105[0m |             disabled={saving}
+     `----
+  [31mx[0m Expected ',', got 'type'
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\components\Reader.tsx[0m:103:1]
+ [2m100[0m |             href="/estante"
+ [2m101[0m |             className="mt-3 flex h-11 w-full items-center justify-center rounded-lg border border-white/10 text-sm font-black text-[#f2dfc5] transition hover:border-[#f3c76a]/60 hover:bg-white/[0.04]"
+ [2m102[0m |           <button
+ [2m103[0m |             type="button"
+     : [35;1m            ^^^^[0m
+ [2m104[0m |             onClick={onSaveProgress}
+ [2m105[0m |             disabled={saving}
+ [2m106[0m |             className="mt-3 h-11 w-full rounded-lg bg-[#f3c76a] text-sm font-black text-[#17120d] transition hover:bg-[#ffd983] disabled:cursor-not-allowed disabled:opacity-70"
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/Reader.tsx
+./src/app/reader/page.tsx
+ ⨯ ./src/app/reader/page.tsx
+Error:   [31mx[0m Unterminated string constant
+    ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\app\reader\page.tsx[0m:10:1]
+ [2m 7[0m | import { bookThemes } from '@/data/bookThemes'
+ [2m 8[0m | import { booksService } from '@/services/books'
+ [2m 9[0m | import { Book, BookPage, ReadingProgress, Review } from '@/types/book'
+ [2m10[0m | import { storage } from '@/utils/storage
+    : [35;1m                        ^^^^^^^^^^^^^^^^[0m
+ [2m11[0m | 
+ [2m12[0m | '
+    `----
+  [31mx[0m Unterminated string constant
+    ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\app\reader\page.tsx[0m:12:1]
+ [2m 9[0m | import { Book, BookPage, ReadingProgress, Review } from '@/types/book'
+ [2m10[0m | import { storage } from '@/utils/storage
+ [2m11[0m | 
+ [2m12[0m | '
+    : [35;1m^[0m
+ [2m13[0m | 
+ [2m14[0m | import Link from 'next/link'
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/reader/page.tsx
+ ⨯ ./src/services/books.ts
+Error:   [31mx[0m Expected '=>', got '('
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\services\books.ts[0m:165:1]
+ [2m162[0m |   },
+ [2m163[0m | }
+ [2m164[0m | 
+ [2m165[0m | async toggleLike(bookId: number) {
+     : [35;1m                ^[0m
+ [2m166[0m |   const response = await api.post('/likes/', {
+ [2m167[0m |     book: bookId,
+ [2m167[0m |   })
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/services/books.ts
+./src/app/reader/page.tsx
+ ⨯ ./src/services/books.ts
+Error:   [31mx[0m Expected '=>', got '('
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\services\books.ts[0m:165:1]
+ [2m162[0m |   },
+ [2m163[0m | }
+ [2m164[0m | 
+ [2m165[0m |   async toggleLike(bookId: number) {
+     : [35;1m                  ^[0m
+ [2m166[0m |   const response = await api.post('/likes/', {
+ [2m167[0m |     book: bookId,
+ [2m167[0m |   })
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/services/books.ts
+./src/app/reader/page.tsx
+ ⨯ ./src/services/books.ts
+Error:   [31mx[0m Expected '=>', got '('
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\services\books.ts[0m:165:1]
+ [2m162[0m |   },
+ [2m163[0m | }
+ [2m164[0m | 
+ [2m165[0m |   async toggleLike(bookId: number) {
+     : [35;1m                  ^[0m
+ [2m166[0m |     const response = await api.post('/likes/', {
+ [2m167[0m |       book: bookId,
+ [2m167[0m |     })
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/services/books.ts
+./src/app/reader/page.tsx
+ ⨯ ./src/services/books.ts
+Error:   [31mx[0m Expected '=>', got '('
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\services\books.ts[0m:165:1]
+ [2m162[0m |   },
+ [2m163[0m | }
+ [2m164[0m | 
+ [2m165[0m |   async toggleLike(bookId: number) {
+     : [35;1m                  ^[0m
+ [2m166[0m |     const response = await api.post('/likes/', {
+ [2m167[0m |       book: bookId,
+ [2m167[0m |     })
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/services/books.ts
+./src/app/reader/page.tsx
+ ⨯ ./src/services/books.ts
+Error:   [31mx[0m Expected '=>', got '('
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\services\books.ts[0m:165:1]
+ [2m162[0m |   },
+ [2m163[0m | }
+ [2m164[0m | 
+ [2m165[0m |   async toggleLike(bookId: number) {
+     : [35;1m                  ^[0m
+ [2m166[0m |     const response = await api.post('/likes/', {
+ [2m167[0m |       book: bookId,
+ [2m167[0m |     })
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/services/books.ts
+./src/app/reader/page.tsx
+ ⨯ ./src/app/reader/page.tsx
+Error:   [31mx[0m Expression expected
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\app\reader\page.tsx[0m:459:1]
+ [2m456[0m |         </div>
+ [2m457[0m |       </div>
+ [2m458[0m | 
+ [2m459[0m |       <Reader
+     : [35;1m      ^[0m
+ [2m460[0m |         book={book}
+ [2m461[0m |         pages={pages}
+ [2m462[0m |         currentPage={currentPage}
+     `----
+  [31mx[0m Expected ',', got 'book'
+     ,-[[36;1;4mC:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\src\app\reader\page.tsx[0m:460:1]
+ [2m457[0m |       </div>
+ [2m458[0m | 
+ [2m459[0m |       <Reader
+ [2m460[0m |         book={book}
+     : [35;1m        ^^^^[0m
+ [2m461[0m |         pages={pages}
+ [2m462[0m |         currentPage={currentPage}
+ [2m463[0m |         fontSize={fontSize}
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/reader/page.tsx
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\.next\cache\webpack\client-development\5.pack.gz_' -> 'C:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\.next\cache\webpack\client-development\5.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: EPERM: operation not permitted, rename 'C:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\.next\cache\webpack\client-development\6.pack.gz_' -> 'C:\Users\ruanalmeida\Desktop\faculdade\pessoal-projects\library-sa\frontLibrary\.next\cache\webpack\client-development\6.pack.gz'

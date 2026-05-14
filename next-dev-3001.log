@@ -1,0 +1,29 @@
+
+> frontlibrary@0.1.0 dev
+> next dev -p 3001
+
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3001
+   - Network:      http://26.17.97.89:3001
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 2.3s
+ ○ Compiling /profile ...
+ ✓ Compiled /profile in 2s (807 modules)
+ GET /profile 200 in 2381ms
+ ✓ Compiled in 444ms (301 modules)
+ ✓ Compiled in 1014ms (301 modules)
+ ✓ Compiled in 307ms (301 modules)
+ ✓ Compiled in 420ms (301 modules)
+ ✓ Compiled in 319ms (301 modules)
+ ✓ Compiled in 213ms (301 modules)
+ ✓ Compiled in 260ms (301 modules)
+ ✓ Compiled in 184ms (301 modules)
+ ✓ Compiled in 231ms (301 modules)
+ ✓ Compiled in 149ms (301 modules)
+ ✓ Compiled in 123ms (301 modules)
+ ✓ Compiled in 200ms (301 modules)
+ ✓ Compiled in 275ms (301 modules)
+ ✓ Compiled in 205ms (301 modules)
+ ✓ Compiled in 172ms (301 modules)
