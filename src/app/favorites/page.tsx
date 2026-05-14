@@ -67,21 +67,29 @@ export default function FavoritesPage() {
     )
   }
 
-  return (
-    <div className="container mx-auto px-4 py-12 bg-[#121214] text-[#E1E1E6] min-h-screen">
-      <header className="flex items-center justify-between mb-12">
-        <div>
-          <h1 className="text-4xl font-black tracking-tighter">MEUS FAVORITOS</h1>
-          <p className="text-sm text-gray-500 uppercase font-bold tracking-widest mt-1">Sua biblioteca pessoal curada</p>
-        </div>
-        <BookOpen className="text-[#A08852] w-8 h-8" />
-      </header>
+return (
+  <div className="container mx-auto px-4 py-12 bg-[#121214] text-[#E1E1E6] min-h-screen">
+    <header className="flex items-center justify-between mb-12">
+      <div>
+        <h1 className="text-4xl font-black tracking-tighter">MEUS FAVORITOS</h1>
+        <p className="text-sm text-gray-500 uppercase font-bold tracking-widest mt-1">Sua biblioteca pessoal curada</p>
+      </div>
+      <BookOpen className="text-[#A08852] w-8 h-8" />
+    </header>
 
-      {loading ? (
-        <div className="flex flex-col items-center justify-center py-20 gap-4">
-          <Loader2 className="animate-spin w-12 h-12 text-[#A08852]" />
-          <p className="font-black text-xs uppercase tracking-widest">Consultando acervo...</p>
-        </div>
+    {/* ADICIONE ESTE BLOCO AQUI PARA USAR A VARIÁVEL 'error' */}
+    {error && (
+      <div className="mb-6 p-4 rounded-xl bg-red-900/20 border border-red-500 text-red-200 text-sm font-bold flex items-center gap-2">
+        <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px]">!</span>
+        {error}
+      </div>
+    )}
+
+    {loading ? (
+      <div className="flex flex-col items-center justify-center py-20 gap-4">
+        <Loader2 className="animate-spin w-12 h-12 text-[#A08852]" />
+        <p className="font-black text-xs uppercase tracking-widest">Consultando acervo...</p>
+      </div>
       ) : favorites.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {favorites.map((fav) => (

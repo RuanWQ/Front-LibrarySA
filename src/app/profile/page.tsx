@@ -6,13 +6,11 @@ import { api } from '@/services/api'
 import { 
   Camera, 
   Pencil, 
-  X, 
   Check, 
   LogOut, 
   Plus, 
   Trash2, 
   AlertTriangle,
-  Settings2
 } from 'lucide-react'
 
 import {
@@ -76,6 +74,7 @@ export default function ProfilePage() {
 
       try {
         setIsLoadingProfile(true)
+        setError('')
         const [profileData, favoritesData, progressData, myBooksData] = await Promise.all([
           usersService.getProfile(user.username),
           booksService.getFavorites(),
@@ -94,7 +93,7 @@ export default function ProfilePage() {
         setAvatarPreview(profileData.avatar || '')
         setBannerPreview(profileData.banner || '')
       } catch (err) {
-        setError('Não foi possível carregar o perfil.')
+        setError('Ops! Não conseguimos carregar suas informações.')
       } finally {
         setIsLoadingProfile(false)
       }
@@ -108,12 +107,13 @@ export default function ProfilePage() {
     if (!bookToDelete) return
     try {
       setDeleteLoading(true)
+      setError('')
       await api.delete(`/books/${bookToDelete.id}/`)
       setMyBooks((current) => current.filter((b) => b.id !== bookToDelete.id))
-      setSuccess('Livro excluído com sucesso.')
+      setSuccess('Livro removido com sucesso!')
       setBookToDelete(null)
     } catch (err) {
-      setError('Não foi possível excluir o livro.')
+      setError('Erro ao excluir a obra. Tente novamente.')
     } finally {
       setDeleteLoading(false)
     }
@@ -137,7 +137,6 @@ export default function ProfilePage() {
   const handleCropSave = async () => {
     if (!cropImage || !croppedAreaPixels) return
     
-    // Simulação do processo de crop (Canvas resumido)
     const image = await new Promise<HTMLImageElement>((resolve) => {
       const img = new Image(); img.src = cropImage; img.onload = () => resolve(img)
     })
@@ -190,14 +189,14 @@ export default function ProfilePage() {
       setSuccess('Perfil atualizado com sucesso!')
       setIsEditing(false)
     } catch (err) {
-      setError('Erro ao salvar perfil.')
+      setError('Não foi possível salvar as alterações do perfil.')
     } finally {
       setIsSaving(false)
     }
   }
 
-  if (loading || isLoadingProfile) return <main className="min-h-screen bg-[#f7efe4] flex items-center justify-center">Carregando...</main>
-  if (!user) return <main className="min-h-screen bg-[#f7efe4] flex items-center justify-center font-bold">Faça login para continuar.</main>
+  if (loading || isLoadingProfile) return <main className="min-h-screen bg-[#f7efe4] flex items-center justify-center font-black uppercase tracking-widest text-[#6f2f38]">Carregando Acervo...</main>
+  if (!user) return <main className="min-h-screen bg-[#f7efe4] flex items-center justify-center font-bold">Acesso negado. Faça login.</main>
 
   const visibleProfile = profile || user
 
@@ -215,9 +214,9 @@ export default function ProfilePage() {
               </div>
               <p className="text-sm text-gray-500 mb-6">Deseja remover <strong>{bookToDelete.title}</strong> permanentemente?</p>
               <div className="flex gap-3">
-                <button onClick={() => setBookToDelete(null)} className="flex-1 rounded-xl border py-3 font-semibold">Cancelar</button>
-                <button onClick={handleDeleteBook} disabled={deleteLoading} className="flex-1 rounded-xl bg-red-600 py-3 text-white font-semibold">
-                  {deleteLoading ? 'Excluindo...' : 'Confirmar'}
+                <button onClick={() => setBookToDelete(null)} className="flex-1 rounded-xl border py-3 font-semibold hover:bg-gray-50 transition-colors">Cancelar</button>
+                <button onClick={handleDeleteBook} disabled={deleteLoading} className="flex-1 rounded-xl bg-red-600 py-3 text-white font-semibold hover:bg-red-700 transition-colors">
+                  {deleteLoading ? 'Processando...' : 'Confirmar'}
                 </button>
               </div>
             </div>
@@ -234,19 +233,26 @@ export default function ProfilePage() {
               </div>
               <div className="mt-6 flex justify-end gap-3">
                    <button onClick={() => setCropImage('')} className="px-6 py-2 rounded-xl border font-bold">Cancelar</button>
-                   <button onClick={handleCropSave} className="px-6 py-2 rounded-xl bg-[#6f2f38] text-white font-bold">Salvar Corte</button>
+                   <button onClick={handleCropSave} className="px-6 py-2 rounded-xl bg-[#6f2f38] text-white font-bold">Recortar</button>
               </div>
             </div>
           </div>
         )}
 
+        {/* FEEDBACKS (IMPORTANTE PARA O DEPLOY PASSAR) */}
+        {error && (
+          <div className="mb-5 p-4 rounded-xl flex items-center gap-3 bg-red-50 text-red-700 border border-red-200 font-bold animate-in slide-in-from-top-2">
+            <AlertTriangle size={20}/> {error}
+          </div>
+        )}
+
         {success && (
-          <div className="mb-5 p-4 rounded-xl flex items-center gap-3 bg-green-50 text-green-700 border border-green-200 animate-in slide-in-from-top-2 font-bold">
+          <div className="mb-5 p-4 rounded-xl flex items-center gap-3 bg-green-50 text-green-700 border border-green-200 font-bold animate-in slide-in-from-top-2">
             <Check size={20}/> {success}
           </div>
         )}
 
-        {/* CABEÇALHO (BANNER DINÂMICO AQUI) */}
+        {/* CARTÃO DE PERFIL */}
         <ProfileCard
           profile={{
             ...visibleProfile,
@@ -262,19 +268,18 @@ export default function ProfilePage() {
               <button onClick={() => setIsEditing(!isEditing)} className="rounded-xl bg-[#6f2f38] px-6 py-2.5 text-white font-bold shadow-lg shadow-[#6f2f38]/20 transition hover:bg-[#5a262d]">
                 {isEditing ? 'Cancelar' : 'Editar Perfil'}
               </button>
-              <button onClick={logout} className="rounded-xl border-2 border-[#d4a03d] px-6 py-2.5 font-bold text-[#d4a03d]">
+              <button onClick={logout} className="rounded-xl border-2 border-[#d4a03d] px-6 py-2.5 font-bold text-[#d4a03d] hover:bg-[#d4a03d]/5 transition-colors">
                 <LogOut size={18} className="inline mr-2"/> Sair
               </button>
             </div>
           }
         />
 
-        {/* ÁREA DE EDIÇÃO DO PERFIL */}
+        {/* FORMULÁRIO DE EDIÇÃO */}
         {isEditing && (
           <form onSubmit={handleSubmit} className="mt-8 animate-in fade-in slide-in-from-top-4 duration-500">
             <div className="overflow-hidden rounded-3xl bg-white shadow-xl border border-slate-200">
               <div className="relative">
-                {/* Banner Editável */}
                 <div className="group relative h-52 w-full bg-slate-200">
                   <img src={bannerPreview || visibleProfile.banner || ''} className="h-full w-full object-cover" alt="Banner" />
                   <label className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
@@ -282,7 +287,6 @@ export default function ProfilePage() {
                     <input type="file" className="hidden" onChange={(e) => handleFileChange(e, 'banner')} accept="image/*" />
                   </label>
                 </div>
-                {/* Avatar Editável */}
                 <div className="absolute -bottom-14 left-10">
                   <div className="group relative h-36 w-36 rounded-full border-[6px] border-white bg-slate-100 shadow-xl overflow-hidden">
                     <img src={avatarPreview || visibleProfile.avatar || ''} className="h-full w-full object-cover" alt="Avatar" />
@@ -297,7 +301,7 @@ export default function ProfilePage() {
               <div className="px-10 pb-10 pt-20">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <label className="text-sm font-black uppercase tracking-widest text-slate-400">Biografia</label>
+                    <label className="text-sm font-black uppercase tracking-widest text-slate-400">Sobre Mim / Biografia</label>
                     <span className={`text-xs font-bold ${form.bio.length > 240 ? 'text-red-500' : 'text-slate-400'}`}>
                       {form.bio.length} / 250
                     </span>
@@ -308,12 +312,12 @@ export default function ProfilePage() {
                     onChange={(e) => setForm({ bio: e.target.value })}
                     rows={4}
                     className="w-full resize-none rounded-2xl border-2 border-slate-100 bg-slate-50 p-5 text-slate-700 outline-none transition-all focus:border-[#6f2f38] focus:bg-white"
-                    placeholder="Conte algo sobre você..."
+                    placeholder="Conte um pouco da sua história como autor ou leitor..."
                   />
                 </div>
                 <div className="mt-8 flex justify-end">
                   <button type="submit" disabled={isSaving} className="rounded-2xl bg-[#6f2f38] px-12 py-4 font-black text-white shadow-xl shadow-[#6f2f38]/30 transition hover:scale-[1.02] disabled:opacity-50">
-                    {isSaving ? 'Salvando...' : 'Salvar Alterações'}
+                    {isSaving ? 'Gravando Alterações...' : 'Salvar Perfil'}
                   </button>
                 </div>
               </div>
@@ -324,8 +328,8 @@ export default function ProfilePage() {
         {/* MINHA ESTANTE */}
         <section className="mt-16">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-black">Minha Estante</h2>
-            <Link href="/books/new" className="flex items-center gap-2 rounded-xl bg-[#6f2f38] px-5 py-2.5 text-white font-bold transition hover:bg-[#5a262d]">
+            <h2 className="text-3xl font-black tracking-tighter">Minha Estante</h2>
+            <Link href="/books/new" className="flex items-center gap-2 rounded-xl bg-[#6f2f38] px-5 py-2.5 text-white font-bold transition hover:bg-[#5a262d] active:scale-95">
               <Plus size={18}/> Novo Livro
             </Link>
           </div>
@@ -339,20 +343,24 @@ export default function ProfilePage() {
                   </Link>
                   <div className="p-5 flex-1 flex flex-col">
                     <h3 className="line-clamp-1 text-lg font-bold">{book.title}</h3>
-                    <p className="text-sm font-medium text-slate-400 mb-4">{book.genre || 'Literatura'}</p>
+                    <p className="text-sm font-medium text-slate-400 mb-4">{book.genre || 'Obra Original'}</p>
                     
                     <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
                       <span className="font-bold text-[#d4a03d]">★ {book.average_rating.toFixed(1)}</span>
                       
                       <div className="flex gap-2">
-                        {/* LINK PARA PÁGINA DE EDIÇÃO - FIXADO AQUI */}
                         <Link 
                           href={`/edit/${book.id}`} 
                           className="p-2 text-slate-300 hover:text-teal-600 transition-colors"
+                          title="Editar Manuscrito"
                         >
                           <Pencil size={20}/>
                         </Link>
-                        <button onClick={() => setBookToDelete(book)} className="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                        <button 
+                          onClick={() => setBookToDelete(book)} 
+                          className="p-2 text-slate-300 hover:text-red-500 transition-colors"
+                          title="Remover Obra"
+                        >
                           <Trash2 size={20}/>
                         </button>
                       </div>
@@ -363,7 +371,7 @@ export default function ProfilePage() {
             </div>
           ) : (
             <div className="rounded-3xl border-2 border-dashed border-[#d7c8b8] bg-white/50 py-20 text-center">
-              <p className="text-slate-400 font-medium">Nenhum livro publicado. Que tal começar um agora?</p>
+              <p className="text-slate-400 font-medium tracking-tight">Nenhuma obra publicada. Comece sua história agora!</p>
             </div>
           )}
         </section>
