@@ -280,47 +280,55 @@ export default function BooksPage() {
   }
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
+  e.preventDefault()
 
-    if (!form.title) {
-      alert('Defina um título.')
-      return
-    }
-
-    try {
-      setSaving(true)
-
-      const payload = {
-        title: form.title,
-        genre: form.genre,
-        description: form.description,
-        cover: form.coverImage,
-        total_pages: dynamicPages.length,
-        styles: form.styles
-      }
-
-      const savedBook = await booksService.createBook(payload)
-
-      await Promise.all(
-        dynamicPages.map((content, index) =>
-          booksService.createPage({
-            book: savedBook.id,
-            page_number: index + 1,
-            content
-          })
-        )
-      )
-
-      localStorage.removeItem('book-draft')
-
-      alert('Obra publicada com sucesso!')
-    } catch (err) {
-      console.error(err)
-      alert('Erro ao publicar a obra.')
-    } finally {
-      setSaving(false)
-    }
+  if (!form.title) {
+    alert('Defina um título.')
+    return
   }
+
+  try {
+    setSaving(true)
+
+    // CRIANDO O PAYLOAD COM CONVERSÃO DE TIPOS
+    const payload = {
+      title: form.title,
+      genre: form.genre,
+      description: form.description,
+      cover: form.coverImage,
+      total_pages: dynamicPages.length,
+      // Aqui convertemos as strings "4px" para números puros
+      styles: {
+        ...form.styles,
+        fontSize: parseInt(form.styles.fontSize),
+        borderWidth: parseInt(form.styles.borderWidth),
+        borderRadius: parseInt(form.styles.borderRadius),
+      }
+    }
+
+    // Agora o TypeScript vai aceitar, poisborderRadius virou number
+    const savedBook = await booksService.createBook(payload as any) 
+
+    await Promise.all(
+      dynamicPages.map((content, index) =>
+        booksService.createPage({
+          book: savedBook.id,
+          page_number: index + 1,
+          content
+        })
+      )
+    )
+
+    localStorage.removeItem('book-draft')
+    alert('Obra publicada com sucesso!')
+    
+  } catch (err) {
+    console.error(err)
+    alert('Erro ao publicar a obra.')
+  } finally {
+    setSaving(false)
+  }
+}
 
   if (authLoading) {
     return (
