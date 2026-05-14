@@ -297,17 +297,17 @@ export default function BooksPage() {
       description: form.description,
       cover: form.coverImage,
       total_pages: dynamicPages.length,
-      // Aqui convertemos as strings "4px" para números puros
+      // Convertemos as strings para números usando parseInt
       styles: {
         ...form.styles,
-        fontSize: parseInt(form.styles.fontSize),
-        borderWidth: parseInt(form.styles.borderWidth),
-        borderRadius: parseInt(form.styles.borderRadius),
+        fontSize: parseInt(form.styles.fontSize) || 18,
+        borderWidth: parseInt(form.styles.borderWidth) || 0,
+        borderRadius: parseInt(form.styles.borderRadius) || 0,
       }
     }
 
-    // Agora o TypeScript vai aceitar, poisborderRadius virou number
-    const savedBook = await booksService.createBook(payload as any) 
+    // O "as any" aqui serve como uma garantia extra para o TypeScript relaxar
+    const savedBook = await booksService.createBook(payload as any)
 
     await Promise.all(
       dynamicPages.map((content, index) =>
@@ -329,6 +329,7 @@ export default function BooksPage() {
     setSaving(false)
   }
 }
+
 
   if (authLoading) {
     return (
