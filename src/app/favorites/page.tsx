@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
-import { supabase } from '@/lib/supabase' 
+import { api } from '@/services/api'
 import { Heart } from 'lucide-react'
 
 export default function FavoritesPage() {
