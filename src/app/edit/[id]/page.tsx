@@ -8,7 +8,6 @@ import {
   Upload,
   Palette,
   Type,
-  Frame,
   Save,
   Book as BookIcon,
   Layout,
