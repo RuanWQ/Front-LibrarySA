@@ -3,7 +3,7 @@ import { Navbar } from '@/components/Navbar'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Biblioteca App',
+  title: 'Biblioteca SA',
   description: 'Uma plataforma de leitura e compartilhamento de livros',
 }
 

@@ -355,7 +355,7 @@ export default function ProfilePage() {
                     <p className="text-sm font-medium text-slate-400 mb-4">{book.genre || 'Obra Original'}</p>
                     
                     <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
-                      <span className="font-bold text-[#d4a03d]">★ {book.average_rating.toFixed(1)}</span>
+                      <span className="font-bold text-[#d4a03d]">★ {Number(book.average_rating || 0).toFixed(1)}</span>
                       
                       <div className="flex gap-2">
                         <Link 
@@ -399,7 +399,7 @@ export default function ProfilePage() {
                     <h3 className="line-clamp-1 text-lg font-bold">{book.title}</h3>
                     <p className="text-sm font-medium text-slate-400">{book.author?.username || 'Autor'}</p>
                     <div className="mt-auto pt-4 border-t border-slate-50">
-                      <span className="font-bold text-[#d4a03d]">★ {book.average_rating?.toFixed(1) || '0.0'}</span>
+                      <span className="font-bold text-[#d4a03d]">★ {Number(book.average_rating || 0).toFixed(1)}</span>
                     </div>
                   </div>
                 </Link>
@@ -425,8 +425,8 @@ export default function ProfilePage() {
                   <div className="flex-1 flex flex-col p-5">
                     <h3 className="line-clamp-1 text-lg font-bold">{book.title}</h3>
                     <p className="text-sm font-medium text-slate-400">{book.author?.username || 'Autor'}</p>
-                    <div className="mt-auto pt-4 border-t border-slate-50">
-                      <span className="font-bold text-[#d4a03d]">★ {book.average_rating?.toFixed(1) || '0.0'}</span>
+                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
+                      <span className="font-bold text-[#d4a03d]">★ {Number(book.average_rating || 0).toFixed(1)}</span>
                     </div>
                   </div>
                 </Link>
@@ -452,8 +452,8 @@ export default function ProfilePage() {
                   <div className="flex-1 flex flex-col p-5">
                     <h3 className="line-clamp-1 text-lg font-bold">{book.title}</h3>
                     <p className="text-sm font-medium text-slate-400">{book.author?.username || 'Autor'}</p>
-                    <div className="mt-auto pt-4 border-t border-slate-50">
-                      <span className="font-bold text-[#d4a03d]">★ {book.average_rating?.toFixed(1) || '0.0'}</span>
+                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
+                      <span className="font-bold text-[#d4a03d]">★ {Number(book.average_rating || 0).toFixed(1)}</span>
                     </div>
                   </div>
                 </Link>
@@ -480,7 +480,7 @@ export default function ProfilePage() {
                     <h3 className="line-clamp-1 text-lg font-bold">{book.title}</h3>
                     <p className="text-sm font-medium text-slate-400">{book.author?.username || 'Autor'}</p>
                     <div className="mt-auto pt-4 border-t border-slate-50">
-                      <span className="font-bold text-[#d4a03d]">★ {book.average_rating?.toFixed(1) || '0.0'}</span>
+                      <span className="font-bold text-[#d4a03d]">★ {Number(book.average_rating || 0).toFixed(1)}</span>
                     </div>
                   </div>
                 </Link>

@@ -22,7 +22,7 @@ export function BookCard({ book }: BookCardProps) {
           <p className="text-gray-600 text-sm mb-2">{book.author.username}</p>
           <div className="flex justify-between items-center">
             <span className="text-yellow-500 font-bold">
-              ⭐ {book.average_rating.toFixed(1)}
+              ⭐ {Number(book.average_rating || 0).toFixed(1)}
             </span>
             <span className="text-gray-500 text-sm">
               {book.total_pages} páginas

@@ -164,7 +164,7 @@ export function BookModal({
                     label="Avaliação"
                     value={
                       typeof book.average_rating === 'number'
-                        ? book.average_rating.toFixed(1)
+                        ? Number(book.average_rating || 0).toFixed(1)
                         : '0.0'
                     }
                   />
