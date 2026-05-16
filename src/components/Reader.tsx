@@ -121,7 +121,7 @@ export function Reader({
         <section className="rounded-lg border border-[#d4a03d]/20 bg-[#f7efe2] text-[#24170f] shadow-[0_28px_80px_rgba(0,0,0,0.42)]">
           <div className="border-b border-[#24170f]/10 px-5 py-4 md:px-8">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <Link href="/books" className="text-sm font-black text-[#8a5a2b] hover:text-[#24170f]">
+              <Link href="/estante" className="text-sm font-black text-[#8a5a2b] hover:text-[#24170f]">
                 Voltar para estante
               </Link>
               <span className="text-sm font-bold text-[#6f5b45]">

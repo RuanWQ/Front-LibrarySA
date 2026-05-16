@@ -39,9 +39,6 @@ export function Navbar() {
             <Link href="/profile" className="hover:text-[#d4a03d]">
               Perfil
             </Link>
-            <button type="button" onClick={logout} className="hover:text-[#d4a03d]">
-              Sair
-            </button>
           </>
         ) : mounted && !user ? (
           <Link href="/login" className="hover:text-[#d4a03d]">

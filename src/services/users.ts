@@ -9,19 +9,17 @@ export const usersService = {
   },
 
   async updateProfile(username: string, data: FormData) {
-
-  const response = await api.patch(
-    `/profiles/${username}/`,
-    data,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  )
-
-  return response.data as Profile
-},
+    const response = await api.patch(
+      `/profiles/${username}/`,
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    )
+    return response.data as Profile
+  },
 
   async createReview(bookId: number, rating: number, comment: string) {
     const response = await api.post('/reviews/', {
@@ -39,15 +37,25 @@ export const usersService = {
     return response.data as Review[]
   },
 
-  async updateReview(reviewId: number, rating: number, comment: string) {
-    const response = await api.patch(`/reviews/${reviewId}/`, {
-      rating,
-      comment,
-    })
+  async updateReview(reviewId: number, rating?: number, comment?: string) {
+    const data: any = {}
+    if (comment !== undefined) data.comment = comment
+    if (rating !== undefined) data.rating = rating
+    
+    const response = await api.patch(`/reviews/${reviewId}/`, data)
     return response.data as Review
   },
 
   async deleteReview(reviewId: number) {
     await api.delete(`/reviews/${reviewId}/`)
   },
+
+  async createReply(parentReviewId: number, comment: string) {
+    const response = await api.post('/reviews/', {
+      parent_review: parentReviewId,
+      comment,
+    })
+    return response.data as Review
+  },
 }
+

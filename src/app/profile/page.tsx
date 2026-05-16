@@ -338,7 +338,7 @@ export default function ProfilePage() {
         <section className="mt-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-black tracking-tighter">Minha Estante</h2>
-            <Link href="/books/new" className="flex items-center gap-2 rounded-xl bg-[#6f2f38] px-5 py-2.5 text-white font-bold transition hover:bg-[#5a262d] active:scale-95">
+            <Link href="/books" className="flex items-center gap-2 rounded-xl bg-[#6f2f38] px-5 py-2.5 text-white font-bold transition hover:bg-[#5a262d] active:scale-95">
               <Plus size={18}/> Novo Livro
             </Link>
           </div>

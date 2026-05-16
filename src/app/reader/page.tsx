@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState, useRef } from 'react'
 
 import { useSearchParams, useRouter } from 'next/navigation'
 
@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 
 import { Reader } from '@/components/Reader'
+import { ReviewCard } from '@/components/ReviewCard'
 
 import { fallbackBooks, getFallbackBookById } from '@/data/fallbackBooks'
 
@@ -123,6 +124,33 @@ function ReaderScreen() {
   const [reviews, setReviews] = useState<Review[]>(
     []
   )
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const submitTimeoutRef = useRef<NodeJS.Timeout>()
+
+  const recalcBookStats = (nextReviews: Review[]) => {
+    const ratedReviews = nextReviews.filter(
+      (review) => review.rating !== undefined && review.rating !== null
+    )
+
+    const reviewCount = ratedReviews.length
+    const averageRating = reviewCount
+      ? ratedReviews.reduce(
+          (sum, review) => sum + (review.rating || 0),
+          0
+        ) / reviewCount
+      : 0
+
+    setBook((prev) =>
+      prev
+        ? {
+            ...prev,
+            review_count: reviewCount,
+            average_rating: parseFloat(averageRating.toFixed(1)),
+          }
+        : prev
+    )
+  }
 
   useEffect(() => {
     let isActive = true
@@ -368,11 +396,13 @@ function ReaderScreen() {
   }
 
   const handleFinishReading = async () => {
-    router.push('/books')
+    router.push('/estante')
   }
 
   const handleSendReview = async () => {
-    if (!book || rating === 0) return
+    if (!book || rating === 0 || isSubmitting) return
+
+    setIsSubmitting(true)
 
     try {
       const review =
@@ -382,33 +412,18 @@ function ReaderScreen() {
           comment,
         })
 
-      setReviews((prev) => [
-        review,
-        ...prev,
-      ])
-
-      setBook((prev) =>
-        prev
-          ? {
-              ...prev,
-              review_count:
-                prev.review_count + 1,
-              average_rating:
-                (
-                  (prev.average_rating *
-                    prev.review_count +
-                    rating) /
-                  (prev.review_count + 1)
-                ),
-            }
-          : prev
-      )
+      setReviews((prev) => {
+        const next = [review, ...prev]
+        recalcBookStats(next)
+        return next
+      })
 
       setComment('')
-
       setRating(0)
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -429,7 +444,7 @@ function ReaderScreen() {
       <div className="border-b border-white/10 bg-[#221910] px-6 py-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <Link
-            href="/books"
+            href="/estante"
             className="flex items-center gap-2 text-[#f3c76a]"
           >
             <ChevronLeft size={18} />
@@ -525,37 +540,62 @@ function ReaderScreen() {
 
           <button
             onClick={handleSendReview}
-            className="mt-4 rounded-2xl bg-[#f3c76a] px-6 py-3 font-bold text-[#1a110a]"
+            disabled={isSubmitting || rating === 0}
+            className="mt-4 rounded-2xl bg-[#f3c76a] px-6 py-3 font-bold text-[#1a110a] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#e5b857] transition"
           >
-            Publicar comentario
+            {isSubmitting ? 'Publicando...' : 'Publicar comentario'}
           </button>
         </div>
 
         <div className="mt-10 space-y-5">
           {reviews.map((review) => (
-            <div
+            <ReviewCard
               key={review.id}
-              className="rounded-3xl border border-white/10 bg-white/[0.04] p-5"
-            >
-              <div className="flex items-center justify-between">
-                <h3 className="font-black">
-                  {
-                    review.author
-                      .username
+              review={review}
+              onUpdate={(updated) => {
+                setReviews((prev) => {
+                  const next = prev.map((r) =>
+                    r.id === updated.id ? updated : r
+                  )
+                  recalcBookStats(next)
+                  return next
+                })
+              }}
+              onDelete={(reviewId, parentReviewId) => {
+                setReviews((prev) => {
+                  const next = parentReviewId
+                    ? prev.map((r) =>
+                        r.id === parentReviewId
+                          ? {
+                              ...r,
+                              replies: r.replies?.filter(
+                                (reply) => reply.id !== reviewId
+                              ),
+                            }
+                          : r
+                      )
+                    : prev.filter((r) => r.id !== reviewId)
+
+                  if (!parentReviewId) {
+                    recalcBookStats(next)
                   }
-                </h3>
 
-                <div className="text-yellow-400">
-                  {'★'.repeat(
-                    review.rating
-                  )}
-                </div>
-              </div>
-
-              <p className="mt-3 text-[#d2c3b4]">
-                {review.comment}
-              </p>
-            </div>
+                  return next
+                })
+              }}
+              onReplyAdded={(reply) => {
+                setReviews((prev) =>
+                  prev.map((r) =>
+                    r.id === reply.parent_review
+                      ? {
+                          ...r,
+                          replies: [...(r.replies || []), reply],
+                        }
+                      : r
+                  )
+                )
+              }}
+            />
           ))}
         </div>
       </section>
