@@ -1,10 +1,8 @@
-import { Book } from './book'
 import { User } from './user'
 
 export interface Review {
   id: number
-  book: Book | number
-  parent_review?: number | null
+  book: number | { id: number };  parent_review?: number | null
   author: User
   rating?: number | null
   comment: string

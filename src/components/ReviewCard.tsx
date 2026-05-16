@@ -1,15 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { Review } from '@/types/review'
+// 1. Mudamos a importação para apontar para o tipo correto e unificado que você mandou
+import { Review } from '@/types/book' 
 import { usersService } from '@/services/users'
-import { useAuth } from '@/hooks/useAuth'
 import { Trash2, Edit2, ChevronDown, ChevronUp, Reply } from 'lucide-react'
 
 interface ReviewCardProps {
   review: Review
   onUpdate: (review: Review) => void
-  onDelete: (reviewId: number) => void
+  onDelete: (reviewId: number, parentReviewId?: number) => void
   onReplyAdded: (reply: Review) => void
 }
 
@@ -19,7 +19,6 @@ export function ReviewCard({
   onDelete,
   onReplyAdded,
 }: ReviewCardProps) {
-  const { user } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [isReplying, setIsReplying] = useState(false)
   const [showReplies, setShowReplies] = useState(false)
@@ -39,7 +38,8 @@ export function ReviewCard({
         editedRating || undefined,
         editedComment
       )
-      onUpdate(updated)
+      // Ajuste leve de tipo caso o service retorne algo sutilmente diferente
+      onUpdate(updated as unknown as Review)
       setIsEditing(false)
     } catch (error) {
       console.error('Erro ao atualizar comentário:', error)
@@ -53,22 +53,26 @@ export function ReviewCard({
     
     setIsDeleting(true)
     try {
-      await usersService.deleteReview(review.id)
-      onDelete(review.id)
+        await usersService.deleteReview(review.id)
+        onDelete(review.id) 
     } catch (error) {
-      console.error('Erro ao deletar comentário:', error)
+        console.error('Erro ao deletar comentário:', error)
     } finally {
-      setIsDeleting(false)
+        setIsDeleting(false)
     }
-  }
+    }
 
   const handleReply = async () => {
     if (!replyComment.trim()) return
     
     setIsSaving(true)
     try {
-      const reply = await usersService.createReply(review.id, replyComment)
-      onReplyAdded(reply)
+      const bookId = typeof review.book === 'object' && review.book !== null 
+      ? review.book.id 
+      : review.book;
+    // 2. Passamos o bookId como terceiro argumento para o seu serviço
+      const reply = await usersService.createReply(review.id, replyComment, bookId)
+      onReplyAdded(reply as unknown as Review)
       setReplyComment('')
       setIsReplying(false)
       setShowReplies(true)
@@ -229,7 +233,7 @@ export function ReviewCard({
                     </div>
                     {reply.can_delete && (
                       <button
-                        onClick={() => onDelete(reply.id)}
+                        onClick={() => onDelete(reply.id, review.id)}
                         className="rounded bg-red-500/20 p-1 hover:bg-red-500/30"
                       >
                         <Trash2 size={14} className="text-red-400" />

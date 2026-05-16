@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useEffect, useState } from 'react'
 
 export function Navbar() {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {

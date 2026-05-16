@@ -22,7 +22,7 @@ export const usersService = {
   },
 
   async createReview(bookId: number, rating: number, comment: string) {
-    const response = await api.post('/reviews/', {
+    const response = await api.post('/reviews', {
       book: bookId,
       rating,
       comment,
@@ -31,7 +31,7 @@ export const usersService = {
   },
 
   async getReviews(bookId?: number) {
-    const response = await api.get('/reviews/', {
+    const response = await api.get('/reviews', {
       params: bookId ? { book: bookId } : {},
     })
     return response.data as Review[]
@@ -50,12 +50,13 @@ export const usersService = {
     await api.delete(`/reviews/${reviewId}/`)
   },
 
-  async createReply(parentReviewId: number, comment: string) {
-    const response = await api.post('/reviews/', {
-      parent_review: parentReviewId,
-      comment,
-    })
-    return response.data as Review
-  },
+  async createReply(parentReviewId: number, comment: string, bookId: number) {
+  const response = await api.post('/reviews/', {
+    parent_review: parentReviewId,
+    comment,
+    book: bookId,
+  })
+  return response.data
+}
 }
 

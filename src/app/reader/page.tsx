@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useMemo, useState, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 
 import { useSearchParams, useRouter } from 'next/navigation'
 
@@ -126,7 +126,7 @@ function ReaderScreen() {
   )
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const submitTimeoutRef = useRef<NodeJS.Timeout>()
+
 
   const recalcBookStats = (nextReviews: Review[]) => {
     const ratedReviews = nextReviews.filter(
